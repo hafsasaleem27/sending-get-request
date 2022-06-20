@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./App.css";
 import MovieList from "./components/MovieList";
+import { ThreeDots } from "react-loader-spinner";
 
 const App = () => {
   const [movies, setMovies] = useState([]);
@@ -54,7 +55,7 @@ const App = () => {
       <section>
         {!isLoading && movies.length > 0 && <MovieList movies={movies} />}
         {!isLoading && movies.length === 0 && <p>No movies to show</p>}
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <ThreeDots color="#000000" height={40} width={40} />}
       </section>
     </React.Fragment>
   );
