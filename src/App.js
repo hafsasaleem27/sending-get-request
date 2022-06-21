@@ -6,6 +6,7 @@ import { ThreeDots } from "react-loader-spinner";
 const App = () => {
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const fetchMoviesHandler = async (event) => {
     // event.preventDefault();
@@ -31,19 +32,25 @@ const App = () => {
 
     /* fetch with async/await */
 
+    setError(false);
     setIsLoading(true);
-    const response = await fetch("https://swapi.dev/api/films");
-    const data = await response.json();
+    try {
+      const response = await fetch("https://swapi.dev/api/film");
+      const data = await response.json();
 
-    const transformedMovieData = data.results.map(movieData => {
-      return {
-        id: movieData.episode_id,
-        name: movieData.title,
-        openingText: movieData.opening_crawl,
-        releaseDate: movieData.release_date,
-      };
-    });
-    setMovies(transformedMovieData);
+      const transformedMovieData = data.results.map(movieData => {
+        return {
+          id: movieData.episode_id,
+          name: movieData.title,
+          openingText: movieData.opening_crawl,
+          releaseDate: movieData.release_date,
+        };
+      });
+      setMovies(transformedMovieData);
+    } catch (error) {
+      // error is an object here with message property containing the error message!
+      setError(error.message);
+    }
     setIsLoading(false);
   };
 
@@ -54,7 +61,8 @@ const App = () => {
       </section>
       <section>
         {!isLoading && movies.length > 0 && <MovieList movies={movies} />}
-        {!isLoading && movies.length === 0 && <p>No movies to show</p>}
+        {!isLoading && movies.length === 0 && !error && <p>No movies to show</p>}
+        {!isLoading && error && <p>{error}</p>}
         {isLoading && <ThreeDots color="#000000" height={40} width={40} />}
       </section>
     </React.Fragment>
