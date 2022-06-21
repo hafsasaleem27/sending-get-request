@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./App.css";
 import MovieList from "./components/MovieList";
 import { ThreeDots } from "react-loader-spinner";
@@ -8,11 +8,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    fetchMoviesHandler();
-  }, []);
-
-  async function fetchMoviesHandler() {
+  const fetchMoviesHandler = useCallback(async () => {
     setError(false);
     setIsLoading(true);
 
@@ -33,7 +29,11 @@ const App = () => {
       setError(error.message);
     }
     setIsLoading(false);
-  }
+  }, []);
+
+  useEffect(() => {
+    fetchMoviesHandler();
+  }, [fetchMoviesHandler]);
 
   let content;
 
@@ -55,9 +55,6 @@ const App = () => {
 
   return (
     <React.Fragment>
-      {/* <section> */}
-        {/* <button onClick={fetchMoviesHandler}>Fetch movies</button> */}
-      {/* </section> */}
       <section>
         {content}
       </section>
