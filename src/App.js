@@ -36,6 +36,10 @@ const App = () => {
     setIsLoading(true);
     try {
       const response = await fetch("https://swapi.dev/api/films");
+      if (!response.ok) {
+        throw new Error("Something went wrong!");
+      }
+      
       const data = await response.json();
 
       const transformedMovieData = data.results.map(movieData => {
